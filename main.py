@@ -33,7 +33,7 @@ async def default():
 
 async def return_resp(message, retcode):
     response = {
-        "message": message,
+        "response": message,
         "retcode": retcode
     }
     return response
@@ -99,3 +99,16 @@ async def create_modelfile(rb: ModelFile):
     """
     ollama.create(model=f"{rb.newModelName}", modelfile=modelfile)
     return await return_resp("successfully created", 200)
+
+
+@app.get("/ollama/list")
+async def create_modelfile():
+    list = ollama.list()
+
+    models = list.get('models', [])
+    list = []
+    for model in models:
+        name = model.get('model')
+        list.append(name)
+    resp = await return_resp(list, 200)
+    return Response(content=json.dumps(resp), media_type="application/json")
