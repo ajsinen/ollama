@@ -112,3 +112,10 @@ async def create_modelfile():
         list.append(name)
     resp = await return_resp(list, 200)
     return Response(content=json.dumps(resp), media_type="application/json")
+
+
+@app.delete("/ollama/delete/model")
+async def delete_ollama_model(model_name: str):
+    ollama.delete(model_name)
+    resp = await return_resp(f"successfully deleted {model_name}", 200)
+    return resp
